@@ -69,6 +69,18 @@ router.get('/users', async (req, res) => {
   }
 });
 
+// Get max sno
+router.get('/billsmax', async (req, res) => {
+  try {
+    const maxsno = await Bill.find({}).sort({"sno":-1}).limit(1);
+    console.log(maxsno)
+    res.send(maxsno);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send(error);
+  }
+});
+
 // Update a user
 router.put('/users/:id', async (req, res) => {
   const { id } = req.params;
