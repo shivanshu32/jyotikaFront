@@ -19,10 +19,28 @@ router.post('/bills', async (req, res) => {
   }
 });
 
+// Create bills & patient
+router.post('/billspatient', async (req, res) => {
+  console.log(req.body)
+  const { name, fatherhusbandname, phone, address, sno, billdate, chargetype, amount } = req.body;
+
+  try {
+    const bill = new Bill({ name, fatherhusbandname, phone, address, sno, billdate, chargetype, amount });
+    await bill.save();
+    const user = new User({ name, fatherhusbandname, phone, address });
+    await user.save();
+    res.send(bill);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send(error);
+  }
+});
+
+
 // Get all bills
 router.get('/bills', async (req, res) => {
   try {
-    const bills = await Bill.find({});
+    const bills = await Bill.find({}).sort({"sno":-1});
     res.send(bills);
   } catch (error) {
     console.error(error);
